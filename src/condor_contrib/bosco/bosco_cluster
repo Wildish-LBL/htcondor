@@ -22,7 +22,10 @@ fi
 usage()
 {
 cat << EOM
-usage: $0 command
+usage: $0 [options] command
+
+options:
+ -p|--prefix                Prefix to install Bosco on the remote cluser
 
 commands:
  -l|--list                  List the installed clusters
@@ -239,10 +242,12 @@ add_cluster_to_list () {
     # $1 = cluster to add
     # $2 = max queued setting of cluster
     # $3 = cluster batch system (pbs, lsf, sge)
+    # $4 = prefix to which bosco is installed under
     # Remove the host (if already there), and (re)add
     remote_host=$1
     max_queued=$2
     cluster_type=$3
+    bosco_prefix=$4
     check_cluster_list2 $remote_host
     if [ $? -eq 0 ]; then
         tmpfile=`mktemp -t tmpclusterlist.XXXXXX`
@@ -250,7 +255,7 @@ add_cluster_to_list () {
         mv tmpfile $CLUSTERLIST_LOCATION
     fi
 
-    echo "entry=$remote_host max_queued=$max_queued cluster_type=$cluster_type" >> $CLUSTERLIST_LOCATION
+    echo "entry=$remote_host max_queued=$max_queued cluster_type=$cluster_type bosco_prefix=$bosco_prefix" >> $CLUSTERLIST_LOCATION
 
 }
 
@@ -579,6 +584,7 @@ while true; do
         -s|--status) get_status $2;  shift 2; exit 0 ;;
         -t|--test) test_cluster $2; shift 2; exit 0 ;;
         -r|--remove) remove_cluster $2; shift 2; exit 0;;
+        -p|--prefix) opt_prefix=$2; shift 2; 
         
         --) echo "No command found" >&2; usage; exit 1;;
         *) echo "Unknown option" >&2; usage; exit 1;;
@@ -746,7 +752,14 @@ fi
 #TODO: do we need a separate sandbox for each cluster?
 remote_base_dir_root="bosco/cluster"
 remote_base_dir_default="$remote_base_dir_root/default"
-remote_base_dir_host="bosco"
+
+# If there is a prefix given by the user, use it
+if [ -z $opt_prefix ]; then
+    remote_base_dir_host="bosco"
+else
+    remote_base_dir_host="$opt_prefix/bosco"
+fi
+
 # TODO: uncomment to enable subdirs
 #remote_base_dir_host="$remote_base_dir_root/$remote_host"
 remote_glite_dir="$remote_base_dir_host/glite"
