@@ -25,7 +25,7 @@ cat << EOM
 usage: $0 [options] command
 
 options:
- -p|--prefix                Prefix to install Bosco on the remote cluser
+ -p|--prefix <path>         Prefix to install Bosco on the remote cluser
 
 commands:
  -l|--list                  List the installed clusters
