@@ -1,0 +1,12 @@
+--- org.glite.ce.blahp/src/server.c.old	2013-01-10 21:15:27.128757546 -0600
++++ org.glite.ce.blahp/src/server.c	2013-01-10 21:15:59.905625049 -0600
+@@ -1197,7 +1191,8 @@
+ 	    (set_cmd_int_option   (&command, cad, "HostSMPSize", "-N", INT_NOQUOTE)  == C_CLASSAD_OUT_OF_MEMORY) ||
+ 	    (set_cmd_bool_option  (&command, cad, "StageCmd",   "-s", NO_QUOTE)      == C_CLASSAD_OUT_OF_MEMORY) ||
+ 	    (set_cmd_string_option(&command, cad, "ClientJobId","-j", NO_QUOTE)      == C_CLASSAD_OUT_OF_MEMORY) ||
+-	    (set_cmd_string_option(&command, cad, "BatchExtraSubmitArgs", "-a", SINGLE_QUOTE) == C_CLASSAD_OUT_OF_MEMORY))
++	    (set_cmd_string_option(&command, cad, "BatchExtraSubmitArgs", "-a", SINGLE_QUOTE) == C_CLASSAD_OUT_OF_MEMORY) ||
++		(set_cmd_int_option(&command, cad, "RequestMemory", "-m", INT_NOQUOTE) == C_CLASSAD_OUT_OF_MEMORY))
+ //	    (set_cmd_string_option(&command, cad, "Args",      	"--", SINGLE_QUOTE)      == C_CLASSAD_OUT_OF_MEMORY))
+ 	{
+ 		/* PUSH A FAILURE */
