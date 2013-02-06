@@ -243,6 +243,7 @@ const char	*MemoryUsage	= "memory_usage";
 const char	*RequestCpus	= "request_cpus";
 const char	*RequestMemory	= "request_memory";
 const char	*RequestDisk	= "request_disk";
+const char	*RequestWalltime	= "request_walltime";
 const std::string  RequestPrefix  = "request_";
 std::set<std::string> fixedReqRes;
 
@@ -2473,6 +2474,18 @@ SetImageSize()
 		}
 		free(tmp);
 	}
+
+	// set an initial value for RequestWalltime
+	if ((tmp = condor_param(RequestWalltime, ATTR_REQUEST_WALLTIME))) {
+        
+        if (MATCH != strcasecmp(tmp, "undefined")) {
+            buffer.formatstr("%s = %s", ATTR_REQUEST_WALLTIME, tmp);
+            InsertJobExpr(buffer);
+        }
+        free(tmp);
+	}
+
+
 	
 }
 
@@ -7322,6 +7335,7 @@ init_params()
     fixedReqRes.insert(RequestCpus);
     fixedReqRes.insert(RequestMemory);
     fixedReqRes.insert(RequestDisk);
+    fixedReqRes.insert(RequestWalltime);
 }
 
 int
